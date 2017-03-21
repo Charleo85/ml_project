@@ -1,6 +1,6 @@
-# CS 4501 Final Project
+# CS 6501 Final Project
 
-This is the repo for the final project for CS4501 spring 2017 at UVa. 
+This is the repo for the final project for CS6501 spring 2017 at UVa. 
 
 Collaborators
 -----
