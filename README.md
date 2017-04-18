@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CS 6501 Final Project
 
 This is the repo for the final project for CS6501 spring 2017 at UVa. 
@@ -79,4 +78,3 @@ For more resources on Jupyter Notebooks, check out the following:
 * Brandon Amos's image completion [blog post](https://bamos.github.io/2016/08/09/deep-completion/)
 * [Blog post](https://medium.com/@ageitgey/abusing-generative-adversarial-networks-to-make-8-bit-pixel-art-e45d9b96cee7) on using GANs in video games. 
 * Andrej Karpathy's [blog post](http://cs.stanford.edu/people/karpathy/gan/) with GAN visualizations.
->>>>>>> e2b9c7fb8935e9d132a745d51283632b4f8e6833
