@@ -61,11 +61,11 @@ def train_model(args):
 	logger.write("{}\n".format(args))
 	logger.write("loading data...")
 	data_loader = DataLoader(args, logger=logger)
-	
-	logger.write("building model...")
-    model = Model(args, logger=logger)
 
-    logger.write("attempt to load saved model...")
+	logger.write("building model...")
+	model = Model(args, logger=logger)
+
+	logger.write("attempt to load saved model...")
 	load_was_success, global_step = model.try_load_model(args.save_path)
 
 	v_x, v_y, v_s, v_c = data_loader.validation_data()
@@ -84,7 +84,7 @@ def train_model(args):
 		kappa = np.zeros((args.batch_size, args.kmixtures, 1))
 
 		for b in range(global_step%args.nbatches, args.nbatches):
-			
+
 			i = e * args.nbatches + b
 			if global_step is not 0 : i+=1 ; global_step = 0
 
@@ -102,7 +102,7 @@ def train_model(args):
 			feed.update(valid_inputs)
 			feed[model.init_kappa] = np.zeros((args.batch_size, args.kmixtures, 1))
 			[valid_loss] = model.sess.run([model.cost], feed)
-			
+
 			running_average = running_average*remember_rate + train_loss*(1-remember_rate)
 
 			end = time.time()
@@ -119,7 +119,7 @@ def sample_model(args, logger=None):
 	logger = Logger(args) if logger is None else logger # instantiate logger, if None
 	logger.write("\nSAMPLING MODE...")
 	logger.write("loading data...")
-	
+
 	logger.write("building model...")
 	model = Model(args, logger)
 

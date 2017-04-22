@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-import cPickle as pickle
+import pickle
 
 from utils import *
 
@@ -15,16 +15,16 @@ def get_style_states(model, args):
     h0, h1, h2 = model.istate_cell0.h.eval(), model.istate_cell1.h.eval(), model.istate_cell2.h.eval()
     if args.style is -1: return [c0, c1, c2, h0, h1, h2] #model 'chooses' random style
 
-    with open(os.path.join(args.data_dir, 'styles.p'),'r') as f:
-        style_strokes, style_strings = pickle.load(f)
+    with open(os.path.join(args.data_dir, 'styles.p'),'rb') as f:
+        style_strokes, style_strings = pickle.load(f, encoding='latin1')
 
     style_strokes, style_string = style_strokes[args.style], style_strings[args.style]
     style_onehot = [to_one_hot(style_string, model.ascii_steps, args.alphabet)]
-        
+
     style_stroke = np.zeros((1, 1, 3), dtype=np.float32)
     style_kappa = np.zeros((1, args.kmixtures, 1))
     prime_len = 500 # must be <= 700
-    
+
     for i in xrange(prime_len):
         style_stroke[0][0] = style_strokes[i,:]
         feed = {model.input_data: style_stroke, model.char_seq: style_onehot, model.init_kappa: style_kappa, \
@@ -56,30 +56,30 @@ def sample(input_text, model, args):
                  model.fstate_cell0.h, model.fstate_cell1.h, model.fstate_cell2.h]
         [pi_hat, mu1, mu2, sigma1_hat, sigma2_hat, rho, eos, window, phi, kappa, alpha, \
                  c0, c1, c2, h0, h1, h2] = model.sess.run(fetch, feed)
-        
+
         #bias stuff:
         sigma1 = np.exp(sigma1_hat - args.bias) ; sigma2 = np.exp(sigma2_hat - args.bias)
         pi_hat *= 1 + args.bias # apply bias
         pi = np.zeros_like(pi_hat) # need to preallocate
         pi[0] = np.exp(pi_hat[0]) / np.sum(np.exp(pi_hat[0]), axis=0) # softmax
-        
+
         # choose a component from the MDN
         idx = np.random.choice(pi.shape[1], p=pi[0])
-	eos = 1 if 0.35 < eos[0][0] else 0 # use 0.5 as arbitrary boundary
+        eos = 1 if 0.35 < eos[0][0] else 0 # use 0.5 as arbitrary boundary
         x1, x2 = sample_gaussian2d(mu1[0][idx], mu2[0][idx], sigma1[0][idx], sigma2[0][idx], rho[0][idx])
-            
+
         # store the info at this time step
         windows.append(window)
         phis.append(phi[0])
         kappas.append(kappa[0].T)
         pis.append(pi[0])
         strokes.append([mu1[0][idx], mu2[0][idx], sigma1[0][idx], sigma2[0][idx], rho[0][idx], eos])
-        
+
         # test if finished (has the read head seen the whole ascii sequence?)
         # main_kappa_idx = np.where(alpha[0]==np.max(alpha[0]));
         # finished = True if kappa[0][main_kappa_idx] > len(input_text) else False
         finished = True if i > args.tsteps else False
-        
+
         # new input is previous output
         prev_x[0][0] = np.array([x1, x2, eos], dtype=np.float32)
         i+=1
