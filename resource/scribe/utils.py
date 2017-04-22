@@ -14,7 +14,7 @@ class DataLoader():
         self.batch_size = args.batch_size
         self.tsteps = args.tsteps
         self.data_scale = args.data_scale # scale data down by this factor
-        self.ascii_steps = args.tsteps/args.tsteps_per_ascii
+        self.ascii_steps = args.tsteps//args.tsteps_per_ascii
         self.logger = logger
         self.limit = limit # removes large noisy gaps in the data
 
@@ -128,7 +128,7 @@ class DataLoader():
 
     def load_preprocessed(self, data_file):
         f = open(data_file,"rb")
-        [self.raw_stroke_data, self.raw_ascii_data] = pickle.load(f)
+        [self.raw_stroke_data, self.raw_ascii_data] = pickle.load(f, encoding='latin1')
         f.close()
 
         # goes thru the list, and only keeps the text entries that have more than tsteps points
@@ -182,7 +182,7 @@ class DataLoader():
         x_batch = []
         y_batch = []
         ascii_list = []
-        for i in xrange(self.batch_size):
+        for i in range(self.batch_size):
             data = self.stroke_data[self.idx_perm[self.pointer]]
             idx = random.randint(0, len(data)-self.tsteps-2)
             x_batch.append(np.copy(data[:self.tsteps]))
