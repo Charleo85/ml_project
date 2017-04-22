@@ -63,9 +63,9 @@ def train_model(args):
 	data_loader = DataLoader(args, logger=logger)
 	
 	logger.write("building model...")
-	model = Model(args, logger=logger)
+    model = Model(args, logger=logger)
 
-	logger.write("attempt to load saved model...")
+    logger.write("attempt to load saved model...")
 	load_was_success, global_step = model.try_load_model(args.save_path)
 
 	v_x, v_y, v_s, v_c = data_loader.validation_data()

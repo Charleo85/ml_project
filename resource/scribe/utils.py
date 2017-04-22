@@ -2,7 +2,7 @@ import numpy as np
 import math
 import random
 import os
-import cPickle as pickle
+import pickle
 import xml.etree.ElementTree as ET
 
 from utils import *
@@ -106,7 +106,7 @@ class DataLoader():
         for i in range(len(filelist)):
             if (filelist[i][-3:] == 'xml'):
                 stroke_file = filelist[i]
-#                 print 'processing '+stroke_file
+#                 print("processing"+str(stroke_file))
                 stroke = convert_stroke_to_array(getStrokes(stroke_file))
                 
                 ascii_file = stroke_file.replace("lineStrokes","ascii")[:-7] + ".txt"
@@ -221,6 +221,6 @@ class Logger():
 
     def write(self, s, print_it=True):
         if print_it:
-            print s
+            print(s)
         with open(self.logf, 'a') as f:
             f.write(s + "\n")
