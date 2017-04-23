@@ -25,7 +25,7 @@ def get_style_states(model, args):
     style_kappa = np.zeros((1, args.kmixtures, 1))
     prime_len = 500 # must be <= 700
 
-    for i in xrange(prime_len):
+    for i in range(prime_len):
         style_stroke[0][0] = style_strokes[i,:]
         feed = {model.input_data: style_stroke, model.char_seq: style_onehot, model.init_kappa: style_kappa, \
                 model.istate_cell0.c: c0, model.istate_cell1.c: c1, model.istate_cell2.c: c2, \

@@ -93,7 +93,7 @@ class Model():
 			kappa = kappa + prev_kappa
 			return alpha, beta, kappa # each ~ [?,kmixtures,1]
 
-		self.init_kappa = tf.placeholder(dtype=tf.float32, shape=[None, self.kmixtures, 1]) 
+		self.init_kappa = tf.placeholder(dtype=tf.float32, shape=[None, self.kmixtures, 1])
 		self.char_seq = tf.placeholder(dtype=tf.float32, shape=[None, self.ascii_steps, self.char_vec_len])
 		prev_kappa = self.init_kappa
 		prev_window = self.char_seq[:,0,:]
@@ -120,7 +120,7 @@ class Model():
 
 		outs_cell2, self.fstate_cell2 = tf.contrib.legacy_seq2seq.rnn_decoder(outs_cell1, self.istate_cell2, self.cell2, loop_function=None, scope='cell2')
 
-	# ----- start building the Mixture Density Network on top (start with a dense layer to predict the MDN params)
+	# ----- start building the `Mixture Density Network `on top (start with a dense layer to predict the MDN params)
 		n_out = 1 + self.nmixtures * 6 # params = end_of_stroke + 6 parameters per Gaussian
 		with tf.variable_scope('mdn_dense'):
 			mdn_w = tf.get_variable("output_w", [self.rnn_size, n_out], initializer=self.graves_initializer)
